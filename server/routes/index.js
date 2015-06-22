@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var pg = require('pg');
-var connectionString = process.env.DATABASE_URL || 'postgres://localhost/todo';
+var connectionString = require(path.join(__dirname, '../', '../', 'config'));
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.sendFile(path.join(__dirname, '../views', 'index.html'));
+  res.sendFile(path.join(__dirname, '../', '../', 'client', 'views', 'index.html'));
 });
 
 module.exports = router;
