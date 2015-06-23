@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var pg = require('pg');
-var connectionString = require(path.join(__dirname, '../', '../', 'config'));
+var config = require(path.join(__dirname, '../', '../', 'config'));
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -19,7 +19,7 @@ router.post('/api/v1/todos', function(req, res) {
   var data = {text: req.body.text, complete: false};
 
   // Get a Postgres client from the connection pool
-  pg.connect(connectionString, function(err, client, done) {
+  pg.connect(config.connectionString, function(err, client, done) {
 
     console.log(client);
 
@@ -52,7 +52,7 @@ router.get('/api/v1/todos', function(req, res) {
   var results = [];
 
   // Get a connection client from the connection pool
-  pg.connect(connectionString, function(err, client, done){
+  pg.connect(config.connectionString, function(err, client, done){
 
     // SQL query > Select Data
     var query = client.query("SELECT * FROM items ORDER BY id ASC");
@@ -86,7 +86,7 @@ router.put('/api/v1/todos/:todo_id', function(req, res) {
   var data = {text: req.body.text, complete: req.body.complete};
 
   // Get a connection client from the connection pool
-  pg.connect(connectionString, function(err, client, done){
+  pg.connect(config.connectionString, function(err, client, done){
 
     // SQL query > Update Data
     client.query("UPDATE items SET text=($1), complete=($2) WHERE id=($3)", [data.text, data.complete, id]);
@@ -120,7 +120,7 @@ router.delete('/api/v1/todos/:todo_id', function(req, res) {
   var id = req.params.todo_id;
 
   // Get a connection client from the connection pool
-  pg.connect(connectionString, function(err, client, done){
+  pg.connect(config.connectionString, function(err, client, done){
 
     // SQL query > Delete Data
     client.query("DELETE FROM items WHERE id=($1)", [id]);
